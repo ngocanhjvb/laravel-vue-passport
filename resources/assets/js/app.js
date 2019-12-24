@@ -5,13 +5,32 @@
  */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import VueProgressBar from 'vue-progressbar';
+import swal from 'sweetalert2'
 
 Vue.use(VueRouter);
 
 
 require('./bootstrap');
 
+window.swal = swal;
 window.Vue = require('vue');
+
+const toast = swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+});
+
+window.toast = toast;
+
+const options = {
+    color: '#bffaf3',
+    failedColor: '#874b4b',
+    height: '5px'
+};
+Vue.use(VueProgressBar, options);
 
 const routes = [
     {
@@ -55,7 +74,7 @@ const router = new VueRouter({
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
+export default new Vue({
     el: '#app',
     router
 });

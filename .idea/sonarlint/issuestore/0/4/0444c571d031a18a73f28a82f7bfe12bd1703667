@@ -1,8 +1,11 @@
 
-TWeb:TableWithoutCaptionCheck" Add a description to this table.(­ã’Òÿÿÿÿÿ8ÔäÏ‘ó-
-s Web:TableHeaderHasIdOrScopeCheck";Add either an 'id' or a 'scope' attribute to this <th> tag.(Ÿ÷¸şıÿÿÿÿ8ÔäÏ‘ó-
-s Web:TableHeaderHasIdOrScopeCheck";Add either an 'id' or a 'scope' attribute to this <th> tag.(èàÂéùÿÿÿÿ8ÔäÏ‘ó-
-n Web:TableHeaderHasIdOrScopeCheck";Add either an 'id' or a 'scope' attribute to this <th> tag.(Ê §ó8ÔäÏ‘ó-
-s Web:TableHeaderHasIdOrScopeCheck";Add either an 'id' or a 'scope' attribute to this <th> tag.(Ûéú»ÿÿÿÿÿ8ÔäÏ‘ó-
-JWeb:BoldAndItalicTagsCheck"Replace this <i> tag by <em>.(ÓÉ¤ë8ÔäÏ‘ó-
-n Web:TableHeaderHasIdOrScopeCheck";Add either an 'id' or a 'scope' attribute to this <th> tag.(æËİâ8‹¥Û‘ó-
+n Web:TableHeaderHasIdOrScopeCheck,";Add either an 'id' or a 'scope' attribute to this <th> tag.(æËİâ8‹¥Û‘ó-
+s Web:TableHeaderHasIdOrScopeCheck-";Add either an 'id' or a 'scope' attribute to this <th> tag.(èàÂéùÿÿÿÿ8ÔäÏ‘ó-
+OWeb:BoldAndItalicTagsCheck;"Replace this <i> tag by <em>.(áïŞçøÿÿÿÿ8úŠØ±ó-
+n Web:TableHeaderHasIdOrScopeCheck/";Add either an 'id' or a 'scope' attribute to this <th> tag.(Ê §ó8‘ÃÓ±ó-
+Mjavascript:S1128P"%Remove this unused import of 'axios'.(ÒÁæÅúÿÿÿÿ8à¨Ú´ó-
+OWeb:BoldAndItalicTagsCheck?"Replace this <i> tag by <em>.(ï€«áşÿÿÿÿ8úŠØ±ó-
+TWeb:TableWithoutCaptionCheck'" Add a description to this table.(­ã’Òÿÿÿÿÿ8ÔäÏ‘ó-
+n Web:TableHeaderHasIdOrScopeCheck.";Add either an 'id' or a 'scope' attribute to this <th> tag.(µıå“8ÔäÏ‘ó-
+s Web:TableHeaderHasIdOrScopeCheck+";Add either an 'id' or a 'scope' attribute to this <th> tag.(Ûéú»ÿÿÿÿÿ8ÔäÏ‘ó-
+s Web:TableHeaderHasIdOrScopeCheck*";Add either an 'id' or a 'scope' attribute to this <th> tag.(Ÿ÷¸şıÿÿÿÿ8ÔäÏ‘ó-
