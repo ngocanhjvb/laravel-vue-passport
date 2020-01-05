@@ -7,29 +7,63 @@
                         <h3 class="card-title">Responsive Hover Table</h3>
 
                         <div class="card-tools">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userModal">
-                                CreateUser
-                            </button>
+                            <button class="btn btn-success" @click="newModal">Add New <i
+                                class="fas fa-user-plus fa-fw"></i></button>
                         </div>
                         <!-- Modal -->
-                        <div class="modal fade" id="userModal" tabindex="-1" role="dialog"
+                        <div class="modal fade" id="addNew" tabindex="-1" role="dialog"
                              aria-labelledby="UserModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="UserModalLabel">Create A User</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                        <h5 class="modal-title" v-show="!editMode" id="addNewLabel">Add New</h5>
+                                        <h5 class="modal-title" v-show="editMode" id="addNewLabel">Update User's
+                                            Info</h5>
                                     </div>
-                                    <div class="modal-body">
+                                    <form @submit.prevent="editMode ? updateUser() : createUser()">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <input v-model="form.name" type="text" name="name"
+                                                       placeholder="Name"
+                                                       class="form-control">
+                                            </div>
 
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                                        </button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
+                                            <div class="form-group">
+                                                <input v-model="form.email" type="email" name="email"
+                                                       placeholder="Email Address"
+                                                       class="form-control">
+                                            </div>
+
+                                            <div class="form-group">
+                                             <textarea v-model="form.bio" name="bio" id="bio"
+                                                       placeholder="Short bio for user (Optional)"
+                                                       class="form-control"></textarea>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <select name="type" v-model="form.type" id="type" class="form-control">
+                                                    <option value="">Select User Role</option>
+                                                    <option value="admin">Admin</option>
+                                                    <option value="user">Standard User</option>
+                                                    <option value="author">Author</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <input v-model="form.password" type="password" name="password"
+                                                       id="password"
+                                                       class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close
+                                            </button>
+                                            <button v-show="editMode" type="submit" class="btn btn-success">Update
+                                            </button>
+                                            <button v-show="!editMode" type="submit" class="btn btn-primary">Create
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -77,18 +111,59 @@
 </template>
 
 <script>
-    import axios from 'axios';
     import {smartLunchApi} from '../helpers';
 
     export default {
         data() {
             return {
-                usersApi: []
+                usersApi: [],
+                form: {
+                    id: '',
+                    name: '',
+                    email: '',
+                    password: '',
+                    type: '',
+                    bio: '',
+                    photo: ''
+                },
+                editMode: false
             }
         },
         methods: {
+            loadUsers() {
+                smartLunchApi('/api/user', 'GET')
+                    .then((res) => {
+                        this.usersApi = res.data;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+            },
+            newModal() {
+                this.editMode = false;
+                this.form = {
+                    id: '',
+                    name: '',
+                    email: '',
+                    password: '',
+                    type: '',
+                    bio: '',
+                    photo: ''
+                };
+                $('#addNew').modal('show');
+            },
             editModal(user) {
-                console.log(user)
+                this.editMode = true;
+                this.form = {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    password: user.password,
+                    type: user.type,
+                    bio: user.bio,
+                    photo: user.photo,
+                };
+                $('#addNew').modal('show');
             },
             deleteUser(id, index) {
                 swal.fire({
@@ -125,16 +200,45 @@
                         )
                     }
                 })
-            }
+            },
+            createUser() {
+                smartLunchApi(`api/user`, 'POST', this.form)
+                    .then((res) => {
+                        console.log(res);
+                        $('#addNew').modal('hide');
+                        swal.fire(
+                            'Created!',
+                            res.message,
+                            'success'
+                        )
+                        Fire.$emit('AfterCreate');
+                    })
+                    .catch(() => {
+                    });
+            },
+            updateUser() {
+                smartLunchApi(`api/user/${this.form.id}`, 'PUT', this.form)
+                    .then((res) => {
+                        console.log(res);
+                        $('#addNew').modal('hide');
+                        swal.fire(
+                            'Updated!',
+                            res.message,
+                            'success'
+                        )
+                        Fire.$emit('AfterCreate');
+                    })
+                    .catch(() => {
+                    });
+            },
         },
         created() {
-            smartLunchApi('/api/user', 'GET')
-                .then((res) => {
-                    this.usersApi = res.data;
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
+            // setInterval(() => this.loadUsers(), 3000);
+            this.loadUsers();
+            Fire.$on('AfterCreate',() => {
+                this.loadUsers();
+            });
+
         },
         computed: {
             users() {

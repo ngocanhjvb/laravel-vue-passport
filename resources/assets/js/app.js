@@ -25,6 +25,8 @@ const toast = swal.mixin({
 
 window.toast = toast;
 
+window.Fire = new Vue();
+
 const options = {
     color: '#bffaf3',
     failedColor: '#874b4b',

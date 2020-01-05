@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -130,13 +130,12 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required|string|max:191',
-            'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
+            'email' => 'required|string|email|max:191|unique:users,email,' . $user->id,
             'password' => 'sometimes|min:6'
         ]);
-
-        $user->update($request->all());
+        $user->update($request->only('name', 'email', 'bio', 'password', 'type'));
         return ['message' => 'Updated the user info'];
     }
 
