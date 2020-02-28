@@ -17,7 +17,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" v-show="!editMode" id="addNewLabel">Add New</h5>
-                                        <h5 class="modal-title" v-show="editMode" id="addNewLabel">Update User's
+                                        <h5 class="modal-title" v-show="editMode" id="updateLabel">Update User's
                                             Info</h5>
                                     </div>
                                     <form @submit.prevent="editMode ? updateUser() : createUser()">
@@ -26,18 +26,21 @@
                                                 <input v-model="form.name" type="text" name="name"
                                                        placeholder="Name"
                                                        class="form-control">
+                                                <span style="color: red" v-if="nameErr" class="error">{{ nameErr[0] }}</span>
                                             </div>
 
                                             <div class="form-group">
                                                 <input v-model="form.email" type="email" name="email"
                                                        placeholder="Email Address"
                                                        class="form-control">
+                                                <span style="color: red" v-if="emailErr" class="error">{{ emailErr[0] }}</span>
                                             </div>
 
                                             <div class="form-group">
                                              <textarea v-model="form.bio" name="bio" id="bio"
                                                        placeholder="Short bio for user (Optional)"
                                                        class="form-control"></textarea>
+                                                <span style="color: red" v-if="bioErr" class="error">{{ bioErr[0] }}</span>
                                             </div>
 
                                             <div class="form-group">
@@ -47,12 +50,14 @@
                                                     <option value="user">Standard User</option>
                                                     <option value="author">Author</option>
                                                 </select>
+                                                <span style="color: red" v-if="typeErr" class="error">{{ typeErr[0] }}</span>
                                             </div>
 
                                             <div class="form-group">
                                                 <input v-model="form.password" type="password" name="password"
                                                        id="password"
                                                        class="form-control">
+                                                <span style="color: red" v-if="passwordErr" class="error">{{ passwordErr[0] }}</span>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -77,6 +82,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Type</th>
+                                <th>Bio</th>
                                 <th>Registered At</th>
                                 <th>Modify</th>
                             </tr>
@@ -87,6 +93,7 @@
                                 <td>{{user.name}}</td>
                                 <td>{{user.email}}</td>
                                 <td>{{user.type}}</td>
+                                <td>{{user.bio}}</td>
                                 <td>{{user.created_at}}</td>
                                 <td>
                                     <a href="#" @click="editModal(user)">
@@ -126,7 +133,8 @@
                     bio: '',
                     photo: ''
                 },
-                editMode: false
+                editMode: false,
+                errors: []
             }
         },
         methods: {
@@ -140,6 +148,7 @@
                     })
             },
             newModal() {
+                this.errors = [];
                 this.editMode = false;
                 this.form = {
                     id: '',
@@ -153,6 +162,7 @@
                 $('#addNew').modal('show');
             },
             editModal(user) {
+                this.errors = [];
                 this.editMode = true;
                 this.form = {
                     id: user.id,
@@ -204,7 +214,6 @@
             createUser() {
                 smartLunchApi(`api/user`, 'POST', this.form)
                     .then((res) => {
-                        console.log(res);
                         $('#addNew').modal('hide');
                         swal.fire(
                             'Created!',
@@ -213,13 +222,15 @@
                         )
                         Fire.$emit('AfterCreate');
                     })
-                    .catch(() => {
+                    .catch((error) => {
+                        if (error.status === 422) {
+                            this.errors = error.data.errors;
+                        }
                     });
             },
             updateUser() {
                 smartLunchApi(`api/user/${this.form.id}`, 'PUT', this.form)
                     .then((res) => {
-                        console.log(res);
                         $('#addNew').modal('hide');
                         swal.fire(
                             'Updated!',
@@ -228,14 +239,17 @@
                         )
                         Fire.$emit('AfterCreate');
                     })
-                    .catch(() => {
+                    .catch((error) => {
+                        if (error.status === 422) {
+                            this.errors = error.data.errors;
+                        }
                     });
             },
         },
         created() {
             // setInterval(() => this.loadUsers(), 3000);
             this.loadUsers();
-            Fire.$on('AfterCreate',() => {
+            Fire.$on('AfterCreate', () => {
                 this.loadUsers();
             });
 
@@ -243,6 +257,21 @@
         computed: {
             users() {
                 return this.usersApi;
+            },
+            nameErr() {
+                return this.errors.name
+            },
+            emailErr() {
+                return this.errors.email
+            },
+            passwordErr() {
+                return this.errors.password
+            },
+            bioErr() {
+                return this.errors.bio
+            },
+            typeErr() {
+                return this.errors.type
             }
         }
     }

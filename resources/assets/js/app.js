@@ -46,6 +46,10 @@ const routes = [
     {
         path: '/users',
         component: require('./components/User').default
+    },
+    {
+        path: '/developer',
+        component: require('./components/Developer').default
     }
 ];
 
@@ -68,6 +72,35 @@ const router = new VueRouter({
 
 // Vue.component('dashboard', require('./components/DashBoard.vue').default);
 // Vue.component('profile', require('./components/Profile.vue').default);
+
+
+Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue').default
+);
+
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue').default
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue').default
+);
+
+Vue.component(
+    'not-found',
+    require('./components/NotFound.vue').default
+);
+Vue.component(
+    'detail',
+    require('./components/Detail.vue').default
+);
+Vue.component(
+    'introduce',
+    require('./components/Introduce.vue').default
+);
 
 
 /**

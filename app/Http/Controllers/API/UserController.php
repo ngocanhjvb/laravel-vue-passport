@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-//        $this->middleware('auth:api');
+        $this->middleware('auth:api');
     }
 
     /**
@@ -30,7 +30,7 @@ class UserController extends Controller
     {
         // $this->authorize('isAdmin');
 //        if (\Gate::allows('isAdmin') || \Gate::allows('isAuthor')) {
-            return response()->json(User::latest()->paginate(5));
+        return response()->json(User::latest()->paginate(5));
 //        }
 
     }
@@ -38,26 +38,28 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
 
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required|string|max:191',
             'email' => 'required|string|email|max:191|unique:users',
-            'password' => 'required|string|min:6'
+            'password' => 'required|string|min:6',
+            'type' => 'required',
         ]);
-
-        return User::create([
+        $user = User::create([
             'name' => $request['name'],
             'email' => $request['email'],
-            'type' => $request['type'],
-            'bio' => $request['bio'],
+            'type' => $request->type,
+            'bio' => $request->bio,
             'photo' => $request['photo'],
             'password' => Hash::make($request['password']),
         ]);
+
+        return $user;
 
 
     }
@@ -68,9 +70,9 @@ class UserController extends Controller
         $user = auth('api')->user();
 
 
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required|string|max:191',
-            'email' => 'required|string|email|max:191|unique:users,email,'.$user->id,
+            'email' => 'required|string|email|max:191|unique:users,email,' . $user->id,
             'password' => 'sometimes|required|min:6'
         ]);
 
@@ -78,21 +80,21 @@ class UserController extends Controller
         $currentPhoto = $user->photo;
 
 
-        if($request->photo != $currentPhoto){
-            $name = time().'.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
+        if ($request->photo != $currentPhoto) {
+            $name = time() . '.' . explode('/', explode(':', substr($request->photo, 0, strpos($request->photo, ';')))[1])[1];
 
-            \Image::make($request->photo)->save(public_path('img/profile/').$name);
+            \Image::make($request->photo)->save(public_path('img/profile/') . $name);
             $request->merge(['photo' => $name]);
 
-            $userPhoto = public_path('img/profile/').$currentPhoto;
-            if(file_exists($userPhoto)){
+            $userPhoto = public_path('img/profile/') . $currentPhoto;
+            if (file_exists($userPhoto)) {
                 @unlink($userPhoto);
             }
 
         }
 
 
-        if(!empty($request->password)){
+        if (!empty($request->password)) {
             $request->merge(['password' => Hash::make($request['password'])]);
         }
 
@@ -110,7 +112,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -121,8 +123,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -142,7 +144,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -158,14 +160,15 @@ class UserController extends Controller
         return ['message' => 'User Deleted'];
     }
 
-    public function search(){
+    public function search()
+    {
 
         if ($search = \Request::get('q')) {
-            $users = User::where(function($query) use ($search){
-                $query->where('name','LIKE',"%$search%")
-                    ->orWhere('email','LIKE',"%$search%");
+            $users = User::where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%$search%")
+                    ->orWhere('email', 'LIKE', "%$search%");
             })->paginate(20);
-        }else{
+        } else {
             $users = User::latest()->paginate(5);
         }
 
