@@ -171,7 +171,7 @@
                             <div class="form-group">
                                 <label for="photo" class="col-sm-2 control-label">Profile Photo</label>
                                 <div class="col-sm-12">
-                                    <input type="file" @change="updateProfile" name="photo" class="form-input">
+                                    <input type="file" @change="updatePicture" name="photo" class="form-input">
                                 </div>
 
                             </div>
@@ -218,7 +218,8 @@
         data() {
             return {
                 form: this.userSetting,
-                errors: {}
+                errors: {},
+                photo: []
             }
         },
         computed: {
@@ -239,12 +240,8 @@
             }
         },
         methods: {
-            getProfilePhoto() {
-
-                let photo = (this.form.photo.length > 200) ? this.form.photo : "img/profile/" + this.form.photo;
-                return photo;
-            },
             updateInfo() {
+                this.userSetting.photo = this.photo;
                 smartLunchApi(`api/profile`, 'PUT', this.userSetting)
                     .then((res) => {
                         this.errors = {}
@@ -255,22 +252,22 @@
                         }
                     });
             },
-            updateProfile(e) {
+            updatePicture(e) {
                 let file = e.target.files[0];
                 let reader = new FileReader();
 
                 let limit = 1024 * 1024 * 2;
                 if (file['size'] > limit) {
-                    swal({
-                        type: 'error',
+                    swal.fire({
                         title: 'Oops...',
                         text: 'You are uploading a large file',
-                    })
+                    });
                     return false;
                 }
 
                 reader.onloadend = (file) => {
-                    this.form.photo = reader.result;
+                    this.photo = reader.result;
+                    this.$emit('updateImage', reader.result);
                 }
                 reader.readAsDataURL(file);
             }

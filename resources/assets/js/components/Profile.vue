@@ -8,7 +8,7 @@
                     </div>
                     <!-- /.col -->
                     <div class="col-md-9">
-                        <detail :user-setting="user"></detail>
+                        <detail :user-setting="user" @updateImage="handleEvent"></detail>
                     </div>
                     <!-- /.col -->
                 </div>
@@ -25,6 +25,12 @@
         data() {
             return {
                 user: {},
+            }
+        },
+        methods: {
+            handleEvent(photo) {
+                this.userProfile.photo = photo;
+                this.userProfile.changeImage = true;
             }
         },
         created() {

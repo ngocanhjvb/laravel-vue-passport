@@ -77,16 +77,24 @@
 <script>
     export default {
         props: ['userProfile'],
+        data() {
+            return {
+                photo: false
+            }
+        },
         computed: {
             profile() {
                 return this.userProfile
-            }
+            },
         },
         methods: {
             getProfilePhoto() {
-                let photo = "http://127.0.0.1:8000/public/img/" + this.userProfile.photo;
-                return photo;
-            }
+                if (this.userProfile.changeImage) {
+                    return this.userProfile.photo;
+                } else {
+                    return 'http://127.0.0.1:8000/img/' + this.userProfile.photo;
+                }
+            },
         }
 
     }
