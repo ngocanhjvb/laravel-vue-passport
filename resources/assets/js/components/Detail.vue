@@ -219,7 +219,6 @@
             return {
                 form: this.userSetting,
                 errors: {},
-                photo: []
             }
         },
         computed: {
@@ -241,7 +240,6 @@
         },
         methods: {
             updateInfo() {
-                this.userSetting.photo = this.photo;
                 smartLunchApi(`api/profile`, 'PUT', this.userSetting)
                     .then((res) => {
                         this.errors = {}
@@ -266,13 +264,12 @@
                 }
 
                 reader.onloadend = (file) => {
-                    this.photo = reader.result;
+                    this.userSetting.photo = reader.result;
                     this.$emit('updateImage', reader.result);
                 }
                 reader.readAsDataURL(file);
             }
         }
-
     }
 </script>
 

@@ -92,7 +92,7 @@
                 if (this.userProfile.changeImage) {
                     return this.userProfile.photo;
                 } else {
-                    return 'http://127.0.0.1:8000/img/' + this.userProfile.photo;
+                    return 'http://127.0.0.1:8000/img/profile/' + this.userProfile.photo;
                 }
             },
         }

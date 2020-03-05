@@ -7,7 +7,7 @@
                         <h3 class="card-title">Responsive Hover Table</h3>
 
                         <div class="card-tools">
-                            <button class="btn btn-success" @click="newModal">Add New <i
+                            <button class="btn btn-success" @click="newModal" v-if="$gate.isAdminOrAuthor()">Add New <i
                                 class="fas fa-user-plus fa-fw"></i></button>
                         </div>
                         <!-- Modal -->
@@ -26,21 +26,24 @@
                                                 <input v-model="form.name" type="text" name="name"
                                                        placeholder="Name"
                                                        class="form-control">
-                                                <span style="color: red" v-if="nameErr" class="error">{{ nameErr[0] }}</span>
+                                                <span style="color: red" v-if="nameErr"
+                                                      class="error">{{ nameErr[0] }}</span>
                                             </div>
 
                                             <div class="form-group">
                                                 <input v-model="form.email" type="email" name="email"
                                                        placeholder="Email Address"
                                                        class="form-control">
-                                                <span style="color: red" v-if="emailErr" class="error">{{ emailErr[0] }}</span>
+                                                <span style="color: red" v-if="emailErr"
+                                                      class="error">{{ emailErr[0] }}</span>
                                             </div>
 
                                             <div class="form-group">
                                              <textarea v-model="form.bio" name="bio" id="bio"
                                                        placeholder="Short bio for user (Optional)"
                                                        class="form-control"></textarea>
-                                                <span style="color: red" v-if="bioErr" class="error">{{ bioErr[0] }}</span>
+                                                <span style="color: red" v-if="bioErr"
+                                                      class="error">{{ bioErr[0] }}</span>
                                             </div>
 
                                             <div class="form-group">
@@ -50,7 +53,8 @@
                                                     <option value="user">Standard User</option>
                                                     <option value="author">Author</option>
                                                 </select>
-                                                <span style="color: red" v-if="typeErr" class="error">{{ typeErr[0] }}</span>
+                                                <span style="color: red" v-if="typeErr"
+                                                      class="error">{{ typeErr[0] }}</span>
                                             </div>
 
                                             <div class="form-group">
@@ -84,7 +88,7 @@
                                 <th>Type</th>
                                 <th>Bio</th>
                                 <th>Registered At</th>
-                                <th>Modify</th>
+                                <th v-show="$gate.isAdminOrAuthor()">Modify</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -95,7 +99,7 @@
                                 <td>{{user.type}}</td>
                                 <td>{{user.bio}}</td>
                                 <td>{{user.created_at}}</td>
-                                <td>
+                                <td v-show="$gate.isAdminOrAuthor()">
                                     <a href="#" @click="editModal(user)">
                                         <i class="fa fa-edit blue"></i>
                                     </a>
@@ -143,8 +147,12 @@
                     .then((res) => {
                         this.usersApi = res.data;
                     })
-                    .catch((err) => {
-                        console.log(err);
+                    .catch((error) => {
+                        swal.fire(
+                            'error',
+                            error.data.message,
+                            'error'
+                        );
                     })
             },
             newModal() {
@@ -197,7 +205,7 @@
                             .catch((error) => {
                                 swal.fire(
                                     'error',
-                                    error,
+                                    error.data.message,
                                     'error'
                                 );
                             })

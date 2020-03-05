@@ -7,6 +7,9 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueProgressBar from 'vue-progressbar';
 import swal from 'sweetalert2'
+import Gate from './Gate'
+
+Vue.prototype.$gate = new Gate(window.user);
 
 Vue.use(VueRouter);
 

@@ -87,16 +87,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="#" class="nav-link active">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Active Page</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Inactive Page</p>
-                                </a>
+                                <router-link to="/users" class="nav-link">
+                                    <i class="fas fa-user blue"></i>
+                                    <p>
+                                        Users
+                                    </p>
+                                </router-link>
                             </li>
                         </ul>
                     </li>
@@ -108,6 +104,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </p>
                         </router-link>
                     </li>
+                    @can('isAdmin')
                     <li class="nav-item">
                         <router-link to="/developer" class="nav-link">
                             <i class="fas fa-info orange"></i>
@@ -116,14 +113,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item">
-                        <router-link to="/users" class="nav-link">
-                            <i class="fas fa-user blue"></i>
-                            <p>
-                                Users
-                            </p>
-                        </router-link>
-                    </li>
+                    @endcan
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('logout') }}"
                            onclick="event.preventDefault();
@@ -168,6 +158,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
     </footer>
 </div>
+@auth
+    <script>
+        window.user = @json(auth()->user())
+    </script>
+@endauth
 
 
 <script src="{{ asset('js/app.js') }}"></script>
