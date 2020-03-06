@@ -40,7 +40,7 @@ Vue.use(VueProgressBar, options);
 const routes = [
     {
         path: '/dashboard',
-        component: require('./components/DashBoard').default
+        component: require('./components/DashBoard').default,
     },
     {
         path: '/profile',
@@ -48,11 +48,16 @@ const routes = [
     },
     {
         path: '/users',
-        component: require('./components/User').default
+        component: require('./components/User').default,
+        name: 'users',
     },
     {
         path: '/developer',
         component: require('./components/Developer').default
+    },
+    {
+        path: '*',
+        component: require('./components/NotFound').default
     }
 ];
 
@@ -76,6 +81,8 @@ const router = new VueRouter({
 // Vue.component('dashboard', require('./components/DashBoard.vue').default);
 // Vue.component('profile', require('./components/Profile.vue').default);
 
+
+Vue.component('pagination', require('laravel-vue-pagination'));
 
 Vue.component(
     'passport-clients',
@@ -114,5 +121,23 @@ Vue.component(
 
 export default new Vue({
     el: '#app',
-    router
+    router,
+    data: {
+        search: ''
+    },
+    methods: {
+        // greet: _.debounce(() => {
+        //     console.log(this.$root);
+        //     Fire.$emit('searching');
+        // }, 1000),
+
+        greet: function (event) {
+            if (this.$root.$route.name !== 'users') {
+                this.$root.$router.push({name: 'users'});
+            }
+            setTimeout(function () {
+                Fire.$emit('searching');
+            }, 1000);
+        }
+    }
 });

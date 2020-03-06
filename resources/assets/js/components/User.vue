@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12" v-if="$gate.isAdminOrAuthor()">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Responsive Hover Table</h3>
@@ -93,7 +93,7 @@
                             </thead>
                             <tbody>
                             <tr v-for="(user,index) in users" :key="user.id">
-                                <td>{{index +1}}</td>
+                                <td>{{ parseInt(index) + 1}}</td>
                                 <td>{{user.name}}</td>
                                 <td>{{user.email}}</td>
                                 <td>{{user.type}}</td>
@@ -114,11 +114,18 @@
                         </table>
                     </div>
                     <!-- /.card-body -->
+                    <div class="card-footer">
+                        <pagination :data="usersApi" @pagination-change-page="getResults"></pagination>
+                    </div>
                 </div>
-                <!-- /.card -->
             </div>
+            <div class="col-12" v-else>
+                <not-found></not-found>
+            </div>
+            <!-- /.card -->
         </div>
     </div>
+
 </template>
 
 <script>
@@ -127,7 +134,7 @@
     export default {
         data() {
             return {
-                usersApi: [],
+                usersApi: {},
                 form: {
                     id: '',
                     name: '',
@@ -142,10 +149,10 @@
             }
         },
         methods: {
-            loadUsers() {
-                smartLunchApi('/api/user', 'GET')
-                    .then((res) => {
-                        this.usersApi = res.data;
+            getResults(page = 1) {
+                axios.get('api/user?page=' + page)
+                    .then(response => {
+                        this.usersApi = Object.assign({}, response.data.data);
                     })
                     .catch((error) => {
                         swal.fire(
@@ -153,7 +160,7 @@
                             error.data.message,
                             'error'
                         );
-                    })
+                    });
             },
             newModal() {
                 this.errors = [];
@@ -256,9 +263,22 @@
         },
         created() {
             // setInterval(() => this.loadUsers(), 3000);
-            this.loadUsers();
+            Fire.$on('searching', () => {
+                let query = this.$parent.search;
+                axios.get('api/findUser?q=' + query)
+                    .then((response) => {
+                        // this.usersApi = data.data
+                        this.usersApi = Object.assign({}, response.data.data);
+                    })
+                    .catch(() => {
+
+                    })
+            })
+
+
+            this.getResults();
             Fire.$on('AfterCreate', () => {
-                this.loadUsers();
+                this.getResults();
             });
 
         },

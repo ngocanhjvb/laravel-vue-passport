@@ -29,9 +29,9 @@ class UserController extends Controller
     public function index()
     {
 //         $this->authorize('isAdmin');
-//        if (\Gate::allows('isAdmin') || \Gate::allows('isAuthor')) {
-            return response()->json(User::latest()->paginate(15));
-//        }
+        if (\Gate::allows('isAdmin') || \Gate::allows('isAuthor')) {
+            return response()->json(User::latest()->paginate(10));
+        }
     }
 
     /**
@@ -160,7 +160,6 @@ class UserController extends Controller
 
     public function search()
     {
-
         if ($search = \Request::get('q')) {
             $users = User::where(function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%$search%")
@@ -169,8 +168,6 @@ class UserController extends Controller
         } else {
             $users = User::latest()->paginate(5);
         }
-
         return $users;
-
     }
 }
