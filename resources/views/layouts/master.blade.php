@@ -26,14 +26,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </li>
         </ul>
         <!-- SEARCH FORM -->
-            <div class="input-group input-group-sm">
-                <input class="form-control form-control-navbar" v-model="search" @keyup="greet" type="search" placeholder="Search" aria-label="Search">
-                <div class="input-group-append">
-                    <button class="btn btn-navbar" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
+        <div class="input-group input-group-sm">
+            <input class="form-control form-control-navbar" v-model="search" @keyup="greet" type="search"
+                   placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-navbar" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
             </div>
+        </div>
     </nav>
     <!-- /.navbar -->
 
@@ -103,14 +104,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </router-link>
                     </li>
                     @can('isAdmin')
-                    <li class="nav-item">
-                        <router-link to="/developer" class="nav-link">
-                            <i class="fas fa-info orange"></i>
-                            <p>
-                                Developer
-                            </p>
-                        </router-link>
-                    </li>
+                        <li class="nav-item">
+                            <router-link to="/developer" class="nav-link">
+                                <i class="fas fa-info orange"></i>
+                                <p>
+                                    Developer
+                                </p>
+                            </router-link>
+                        </li>
                     @endcan
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('logout') }}"
@@ -158,7 +159,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </div>
 @auth
     <script>
-        window.user = @json(auth()->user())
+        window.user = @json(auth()->user());
+        window.baseUrl = @json(asset('/'))
     </script>
 @endauth
 
