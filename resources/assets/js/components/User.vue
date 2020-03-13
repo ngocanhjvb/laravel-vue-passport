@@ -115,7 +115,7 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        <pagination :data="usersApi" @pagination-change-page="getResults"></pagination>
+                        <pagination :data="Object.assign({},usersApi)" @pagination-change-page="getResults"></pagination>
                     </div>
                 </div>
             </div>
@@ -129,12 +129,12 @@
 </template>
 
 <script>
-    import {smartLunchApi} from '../helpers';
+    import {vueLarApi} from '../helpers';
 
     export default {
         data() {
             return {
-                usersApi: {},
+                usersApi: [],
                 form: {
                     id: '',
                     name: '',
@@ -150,9 +150,9 @@
         },
         methods: {
             getResults(page = 1) {
-                axios.get('api/user?page=' + page)
+                vueLarApi(`api/user?page=` + page)
                     .then(response => {
-                        this.usersApi = Object.assign({}, response.data.data);
+                        this.usersApi = response.data;
                     })
                     .catch((error) => {
                         swal.fire(
@@ -200,7 +200,7 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.value) {
-                        smartLunchApi(`api/user/${id}`, 'DELETE', {id: id})
+                        vueLarApi(`api/user/${id}`, 'DELETE', {id: id})
                             .then((response) => {
                                 this.usersApi.splice(index, 1);
                                 swal.fire(
@@ -227,7 +227,7 @@
                 })
             },
             createUser() {
-                smartLunchApi(`api/user`, 'POST', this.form)
+                vueLarApi(`api/user`, 'POST', this.form)
                     .then((res) => {
                         $('#addNew').modal('hide');
                         swal.fire(
@@ -244,7 +244,7 @@
                     });
             },
             updateUser() {
-                smartLunchApi(`api/user/${this.form.id}`, 'PUT', this.form)
+                vueLarApi(`api/user/${this.form.id}`, 'PUT', this.form)
                     .then((res) => {
                         $('#addNew').modal('hide');
                         swal.fire(
@@ -265,10 +265,9 @@
             // setInterval(() => this.loadUsers(), 3000);
             Fire.$on('searching', () => {
                 let query = this.$parent.search;
-                axios.get('api/findUser?q=' + query)
+                vueLarApi('api/findUser?q=' + query)
                     .then((response) => {
-                        // this.usersApi = data.data
-                        this.usersApi = Object.assign({}, response.data.data);
+                        this.usersApi = response.data;
                     })
                     .catch(() => {
 

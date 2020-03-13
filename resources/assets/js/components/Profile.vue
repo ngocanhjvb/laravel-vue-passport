@@ -19,7 +19,7 @@
 </template>
 
 <script>
-    import {smartLunchApi} from '../helpers';
+    import {vueLarApi} from '../helpers';
 
     export default {
         data() {
@@ -34,7 +34,7 @@
             }
         },
         created() {
-            smartLunchApi('/api/profile', 'GET')
+            vueLarApi('/api/profile', 'GET')
                 .then((res) => {
                     this.user = res
                 })

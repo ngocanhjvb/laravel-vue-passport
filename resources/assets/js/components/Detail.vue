@@ -211,7 +211,7 @@
 </template>
 
 <script>
-    import {smartLunchApi} from '../helpers';
+    import {vueLarApi} from '../helpers';
 
     export default {
         props: ['userSetting'],
@@ -240,7 +240,7 @@
         },
         methods: {
             updateInfo() {
-                smartLunchApi(`api/profile`, 'PUT', this.userSetting)
+                vueLarApi(`api/profile`, 'PUT', this.userSetting)
                     .then((res) => {
                         this.errors = {}
                     })

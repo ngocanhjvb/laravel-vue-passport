@@ -10,7 +10,7 @@ axios.interceptors.response.use(response => {
     return response;
 });
 
-export function smartLunchApi(url, method = 'GET', data = {}, responseType = 'JSON') {
+export function vueLarApi(url, method = 'GET', data = {}, responseType = 'JSON') {
     return new Promise(((resolve, reject) => {
         axios({
             method: method,
