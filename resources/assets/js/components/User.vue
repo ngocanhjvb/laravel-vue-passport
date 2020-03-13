@@ -205,7 +205,7 @@
                                 this.usersApi.splice(index, 1);
                                 swal.fire(
                                     'Deleted!',
-                                    response,
+                                    response.message,
                                     'success'
                                 );
                             })
