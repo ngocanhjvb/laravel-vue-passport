@@ -112,11 +112,14 @@
                             </tr>
                             </tbody>
                         </table>
+                        <paginate
+                            :page-count="pageCount"
+                            :click-handler="getResults"
+                            :container-class="'pagination'"
+                            :page-class="'page-item'">
+                        </paginate>
                     </div>
                     <!-- /.card-body -->
-                    <div class="card-footer">
-                        <pagination :data="Object.assign({},usersApi)" @pagination-change-page="getResults"></pagination>
-                    </div>
                 </div>
             </div>
             <div class="col-12" v-else>
@@ -130,8 +133,12 @@
 
 <script>
     import {vueLarApi} from '../helpers';
+    import Paginate from 'vuejs-paginate'
 
     export default {
+        components: {
+            Paginate
+        },
         data() {
             return {
                 usersApi: [],
@@ -145,19 +152,21 @@
                     photo: ''
                 },
                 editMode: false,
-                errors: []
+                errors: [],
+                pageCount: 1,
             }
         },
         methods: {
-            getResults(page = 1) {
+            getResults(page) {
                 vueLarApi(`api/user?page=` + page)
                     .then(response => {
                         this.usersApi = response.data;
+                        this.pageCount = response.total / 5
                     })
                     .catch((error) => {
                         swal.fire(
                             'error',
-                            error.data.message,
+                            error.message,
                             'error'
                         );
                     });
@@ -277,7 +286,7 @@
 
             this.getResults();
             Fire.$on('AfterCreate', () => {
-                this.getResults();
+                this.getResults(1);
             });
 
         },
@@ -303,3 +312,10 @@
         }
     }
 </script>
+<style lang="css">
+    .pagination {
+    }
+
+    .page-item {
+    }
+</style>

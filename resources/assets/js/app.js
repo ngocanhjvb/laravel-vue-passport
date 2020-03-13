@@ -82,7 +82,6 @@ const router = new VueRouter({
 // Vue.component('profile', require('./components/Profile.vue').default);
 
 
-Vue.component('pagination', require('laravel-vue-pagination'));
 
 Vue.component(
     'passport-clients',
