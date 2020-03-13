@@ -210,11 +210,12 @@
                                 );
                             })
                             .catch((error) => {
-                                swal.fire(
-                                    'error',
-                                    error.data.message,
-                                    'error'
-                                );
+                                console.log(error)
+                                // swal.fire(
+                                //     'error',
+                                //     error.data.message,
+                                //     'error'
+                                // );
                             })
 
                     } else {
