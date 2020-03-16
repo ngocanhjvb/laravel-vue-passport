@@ -52,6 +52,11 @@ const routes = [
         name: 'users',
     },
     {
+        path: '/jobs',
+        component: require('./components/Job').default,
+        name: 'jobs',
+    },
+    {
         path: '/developer',
         component: require('./components/Developer').default
     },
@@ -80,7 +85,6 @@ const router = new VueRouter({
 
 // Vue.component('dashboard', require('./components/DashBoard.vue').default);
 // Vue.component('profile', require('./components/Profile.vue').default);
-
 
 
 Vue.component(

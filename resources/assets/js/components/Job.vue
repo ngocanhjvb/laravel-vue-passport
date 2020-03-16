@@ -8,19 +8,19 @@
 
                         <div class="card-tools">
                             <button class="btn btn-success" @click="newModal" v-if="$gate.isAdminOrAuthor()">Add New <i
-                                class="fas fa-user-plus fa-fw"></i></button>
+                                class="fas fa-job-plus fa-fw"></i></button>
                         </div>
                         <!-- Modal -->
                         <div class="modal fade" id="addNew" tabindex="-1" role="dialog"
-                             aria-labelledby="UserModalLabel" aria-hidden="true">
+                             aria-labelledby="JobModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" v-show="!editMode" id="addNewLabel">Add New</h5>
-                                        <h5 class="modal-title" v-show="editMode" id="updateLabel">Update User's
+                                        <h5 class="modal-title" v-show="editMode" id="updateLabel">Update Job's
                                             Info</h5>
                                     </div>
-                                    <form @submit.prevent="editMode ? updateUser() : createUser()">
+                                    <form @submit.prevent="editMode ? updateJob() : createJob()">
                                         <div class="modal-body">
                                             <div class="form-group">
                                                 <input v-model="form.name" type="text" name="name"
@@ -31,37 +31,19 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <input v-model="form.email" type="email" name="email"
-                                                       placeholder="Email Address"
+                                                <input v-model="form.area" type="text" name="text"
+                                                       placeholder="AREA"
                                                        class="form-control">
-                                                <span style="color: red" v-if="emailErr"
-                                                      class="error">{{ emailErr[0] }}</span>
+                                                <span style="color: red" v-if="areaErr"
+                                                      class="error">{{ areaErr[0] }}</span>
                                             </div>
 
                                             <div class="form-group">
-                                             <textarea v-model="form.bio" name="bio" id="bio"
-                                                       placeholder="Short bio for user (Optional)"
-                                                       class="form-control"></textarea>
-                                                <span style="color: red" v-if="bioErr"
-                                                      class="error">{{ bioErr[0] }}</span>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <select name="type" v-model="form.type" id="type" class="form-control">
-                                                    <option value="">Select User Role</option>
-                                                    <option value="admin">Admin</option>
-                                                    <option value="user">Standard User</option>
-                                                    <option value="author">Author</option>
-                                                </select>
-                                                <span style="color: red" v-if="typeErr"
-                                                      class="error">{{ typeErr[0] }}</span>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <input v-model="form.password" type="password" name="password"
-                                                       id="password"
+                                                <input v-model="form.code" type="text" name="text"
+                                                       placeholder="CODE"
                                                        class="form-control">
-                                                <span style="color: red" v-if="passwordErr" class="error">{{ passwordErr[0] }}</span>
+                                                <span style="color: red" v-if="codeErr"
+                                                      class="error">{{ codeErr[0] }}</span>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -84,27 +66,25 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
-                                <th>Email</th>
-                                <th>Type</th>
-                                <th>Bio</th>
+                                <th>Area</th>
+                                <th>Code</th>
                                 <th>Registered At</th>
                                 <th v-show="$gate.isAdminOrAuthor()">Modify</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="(user,index) in users" :key="user.id">
+                            <tr v-for="(job,index) in jobs" :key="job.id">
                                 <td>{{ parseInt(index) + 1}}</td>
-                                <td>{{user.name}}</td>
-                                <td>{{user.email}}</td>
-                                <td>{{user.type}}</td>
-                                <td>{{user.bio}}</td>
-                                <td>{{user.created_at}}</td>
+                                <td>{{job.name}}</td>
+                                <td>{{job.area}}</td>
+                                <td>{{job.code}}</td>
+                                <td>{{job.created_at}}</td>
                                 <td v-show="$gate.isAdminOrAuthor()">
-                                    <a href="#" @click="editModal(user)">
+                                    <a href="#" @click="editModal(job)">
                                         <i class="fa fa-edit blue"></i>
                                     </a>
                                     /
-                                    <a href="#" @click="deleteUser(user.id ,index)">
+                                    <a href="#" @click="deleteJob(job.id ,index)">
                                         <i class="fa fa-trash red"></i>
                                     </a>
 
@@ -141,15 +121,12 @@
         },
         data() {
             return {
-                usersApi: [],
+                jobsApi: [],
                 form: {
                     id: '',
                     name: '',
-                    email: '',
-                    password: '',
-                    type: '',
-                    bio: '',
-                    photo: ''
+                    area: '',
+                    code: '',
                 },
                 editMode: false,
                 errors: [],
@@ -158,9 +135,9 @@
         },
         methods: {
             getResults(page) {
-                vueLarApi(`api/user?page=` + page)
+                vueLarApi(`api/jobs?page=` + page)
                     .then(response => {
-                        this.usersApi = response.data;
+                        this.jobsApi = response.data;
                         this.pageCount = response.total / 5
                     })
                     .catch((error) => {
@@ -177,29 +154,23 @@
                 this.form = {
                     id: '',
                     name: '',
-                    email: '',
-                    password: '',
-                    type: '',
-                    bio: '',
-                    photo: ''
+                    area: '',
+                    code: ''
                 };
                 $('#addNew').modal('show');
             },
-            editModal(user) {
+            editModal(job) {
                 this.errors = [];
                 this.editMode = true;
                 this.form = {
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                    password: user.password,
-                    type: user.type,
-                    bio: user.bio,
-                    photo: user.photo,
+                    id: job.id,
+                    name: job.name,
+                    area: job.area,
+                    code: job.code,
                 };
                 $('#addNew').modal('show');
             },
-            deleteUser(id, index) {
+            deleteJob(id, index) {
                 swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -209,9 +180,9 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.value) {
-                        vueLarApi(`api/user/${id}`, 'DELETE', {id: id})
+                        vueLarApi(`api/jobs/${id}`, 'DELETE', {id: id})
                             .then((response) => {
-                                this.usersApi.splice(index, 1);
+                                this.jobsApi.splice(index, 1);
                                 swal.fire(
                                     'Deleted!',
                                     response.message,
@@ -235,8 +206,8 @@
                     }
                 })
             },
-            createUser() {
-                vueLarApi(`api/user`, 'POST', this.form)
+            createJob() {
+                vueLarApi(`api/jobs`, 'POST', this.form)
                     .then((res) => {
                         $('#addNew').modal('hide');
                         swal.fire(
@@ -252,8 +223,8 @@
                         }
                     });
             },
-            updateUser() {
-                vueLarApi(`api/user/${this.form.id}`, 'PUT', this.form)
+            updateJob() {
+                vueLarApi(`api/jobs/${this.form.id}`, 'PUT', this.form)
                     .then((res) => {
                         $('#addNew').modal('hide');
                         swal.fire(
@@ -271,43 +242,24 @@
             },
         },
         created() {
-            // setInterval(() => this.loadUsers(), 3000);
-            Fire.$on('searching', () => {
-                let query = this.$parent.search;
-                vueLarApi('api/findUser?q=' + query)
-                    .then((response) => {
-                        this.usersApi = response.data;
-                    })
-                    .catch(() => {
-
-                    })
-            })
-
-
-            this.getResults();
+            this.getResults(1);
             Fire.$on('AfterCreate', () => {
                 this.getResults(1);
             });
 
         },
         computed: {
-            users() {
-                return this.usersApi;
+            jobs() {
+                return this.jobsApi;
             },
             nameErr() {
                 return this.errors.name
             },
-            emailErr() {
-                return this.errors.email
+            areaErr() {
+                return this.errors.area
             },
-            passwordErr() {
-                return this.errors.password
-            },
-            bioErr() {
-                return this.errors.bio
-            },
-            typeErr() {
-                return this.errors.type
+            codeErr() {
+                return this.errors.code
             }
         }
     }

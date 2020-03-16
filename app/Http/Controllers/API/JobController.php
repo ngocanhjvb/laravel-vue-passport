@@ -15,6 +15,12 @@ class JobController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
+
     public function index()
     {
         if (\Gate::allows('isAdmin') || \Gate::allows('isAuthor')) {
@@ -35,7 +41,7 @@ class JobController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -43,21 +49,20 @@ class JobController extends Controller
         $this->validate($request, [
             'name' => 'required|string|max:191',
             'area' => 'required|string',
-            'code' => 'required|string|unique:users',
+            'code' => 'required|string|unique:jobs',
         ]);
         $job = Job::create([
             'name' => $request['name'],
             'area' => $request['area'],
             'code' => $request['code'],
         ]);
-
         return $job;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -68,7 +73,7 @@ class JobController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -79,23 +84,38 @@ class JobController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
+        $job = Job::findOrFail($id);
+
+        $this->validate($request, [
+            'name' => 'required|string|max:191',
+            'area' => 'required|string',
+            'code' => 'required|string|unique:users,email,' . $job->id,
+        ]);
+        $job->update($request->only('name', 'area', 'code'));
+        return ['message' => 'Updated the job info'];
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('isAdmin');
+
+        $job = Job::findOrFail($id);
+        // delete the job
+
+        $job->delete();
+
+        return ['message' => 'Job Deleted'];
     }
 }

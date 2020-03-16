@@ -87,6 +87,7 @@
                                 <th>Email</th>
                                 <th>Type</th>
                                 <th>Bio</th>
+                                <th>Job</th>
                                 <th>Registered At</th>
                                 <th v-show="$gate.isAdminOrAuthor()">Modify</th>
                             </tr>
@@ -98,6 +99,7 @@
                                 <td>{{user.email}}</td>
                                 <td>{{user.type}}</td>
                                 <td>{{user.bio}}</td>
+                                <td>{{user.job.name}}</td>
                                 <td>{{user.created_at}}</td>
                                 <td v-show="$gate.isAdminOrAuthor()">
                                     <a href="#" @click="editModal(user)">
