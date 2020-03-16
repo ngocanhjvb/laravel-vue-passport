@@ -160,14 +160,11 @@ class UserController extends Controller
 
     public function search()
     {
-        if ($search = \Request::get('q')) {
-            $users = User::where(function ($query) use ($search) {
-                $query->where('name', 'LIKE', "%$search%")
-                    ->orWhere('email', 'LIKE', "%$search%");
-            })->paginate(20);
+        if ($search = \Request::get('query')) {
+            $users = User::with('job')->whereLike(['name', 'job.code', 'job.name'], $search)->paginate(5);
         } else {
-            $users = User::latest()->paginate(5);
+            $users = User::with('job')->latest()->paginate(5);
         }
-        return $users;
+        return response()->json($users);
     }
 }

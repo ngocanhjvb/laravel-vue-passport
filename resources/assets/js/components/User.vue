@@ -276,7 +276,7 @@
             // setInterval(() => this.loadUsers(), 3000);
             Fire.$on('searching', () => {
                 let query = this.$parent.search;
-                vueLarApi('api/findUser?q=' + query)
+                vueLarApi('api/findUser?query=' + query)
                     .then((response) => {
                         this.usersApi = response.data;
                     })
