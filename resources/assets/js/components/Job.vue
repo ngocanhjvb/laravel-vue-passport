@@ -4,11 +4,11 @@
             <div class="col-12" v-if="$gate.isAdminOrAuthor()">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Responsive Hover Table</h3>
+                        <h3 class="card-title">List Jobs</h3>
 
                         <div class="card-tools">
                             <button class="btn btn-success" @click="newModal" v-if="$gate.isAdminOrAuthor()">Add New <i
-                                class="fas fa-job-plus fa-fw"></i></button>
+                                class="fas fa-icons-plus fa-fw"></i></button>
                         </div>
                         <!-- Modal -->
                         <div class="modal fade" id="addNew" tabindex="-1" role="dialog"
@@ -31,7 +31,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <input v-model="form.area" type="text" name="text"
+                                                <input v-model="form.area" type="text" name="area"
                                                        placeholder="AREA"
                                                        class="form-control">
                                                 <span style="color: red" v-if="areaErr"
@@ -39,7 +39,7 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <input v-model="form.code" type="text" name="text"
+                                                <input v-model="form.code" type="text" name="code"
                                                        placeholder="CODE"
                                                        class="form-control">
                                                 <span style="color: red" v-if="codeErr"

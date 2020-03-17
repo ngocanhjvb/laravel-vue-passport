@@ -103,6 +103,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </router-link>
                                 </li>
                             @endcan
+                            @can('isAdmin')
+                                <li class="nav-item">
+                                    <router-link to="/companies" class="nav-link">
+                                        <i class="fas fa-user blue"></i>
+                                        <p>
+                                            Companies
+                                        </p>
+                                    </router-link>
+                                </li>
+                            @endcan
                         </ul>
                     </li>
                     <li class="nav-item">

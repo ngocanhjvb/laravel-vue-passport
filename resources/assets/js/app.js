@@ -39,6 +39,10 @@ Vue.use(VueProgressBar, options);
 
 const routes = [
     {
+        path: '/company/:id',
+        component: require('./components/DetailCompany').default,
+    },
+    {
         path: '/dashboard',
         component: require('./components/DashBoard').default,
     },
@@ -55,6 +59,11 @@ const routes = [
         path: '/jobs',
         component: require('./components/Job').default,
         name: 'jobs',
+    },
+    {
+        path: '/companies',
+        component: require('./components/Company').default,
+        name: 'companies',
     },
     {
         path: '/developer',

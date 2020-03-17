@@ -23,4 +23,5 @@ Route::get('findUser', 'API\UserController@search');
 Route::put('profile', 'API\UserController@updateProfile');
 
 Route::resource('jobs', 'API\JobController');
+Route::resource('companies', 'API\CompanyController');
 

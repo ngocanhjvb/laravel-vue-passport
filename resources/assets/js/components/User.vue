@@ -99,7 +99,7 @@
                                 <td>{{user.email}}</td>
                                 <td>{{user.type}}</td>
                                 <td>{{user.bio}}</td>
-                                <td>{{user.job.name}}</td>
+                                <td>{{ user.job === null ? '' : user.job.name }}</td>
                                 <td>{{user.created_at}}</td>
                                 <td v-show="$gate.isAdminOrAuthor()">
                                     <a href="#" @click="editModal(user)">
