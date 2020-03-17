@@ -123,6 +123,10 @@ Vue.component(
     'introduce',
     require('./components/Introduce.vue').default
 );
+Vue.component(
+    'invitation',
+    require('./components/Invitation.vue').default
+);
 
 
 /**

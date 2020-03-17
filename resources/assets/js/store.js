@@ -1,15 +1,11 @@
 export default {
     state: {
         currentCompany: null,
-        currentJob: null,
         invitations: null
     },
     getters: {
         currentCompany(state) {
             return state.currentCompany;
-        },
-        currentJob(state) {
-            return state.currentJob;
         },
         invitations(state) {
             return state.invitations;

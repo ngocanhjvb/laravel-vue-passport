@@ -29,10 +29,12 @@
 </template>
 
 <script>
+    import {vueLarApi} from "../helpers";
+
     export default {
         data() {
             return {
-
+                companies: []
             }
         },
         methods: {
@@ -44,7 +46,13 @@
             }
         },
         created() {
-
+            vueLarApi('api/get-info')
+                .then((res) => {
+                    this.companies = res
+                })
+                .catch((error) => {
+                   console.log(error)
+                });
         }
     }
 </script>

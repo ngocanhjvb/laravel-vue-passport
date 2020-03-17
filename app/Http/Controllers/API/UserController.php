@@ -167,4 +167,12 @@ class UserController extends Controller
         }
         return response()->json($users);
     }
+
+    public function getInfo()
+    {
+        $companies = auth()->user()->companies->filter(function ($value, $key) {
+            return $value->status = WAITING;
+        });
+        return response()->json($companies);
+    }
 }
