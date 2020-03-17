@@ -286,7 +286,7 @@
             })
 
 
-            this.getResults();
+            this.getResults(1);
             Fire.$on('AfterCreate', () => {
                 this.getResults(1);
             });
