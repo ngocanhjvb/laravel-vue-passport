@@ -25,3 +25,5 @@ Route::put('profile', 'API\UserController@updateProfile');
 Route::resource('jobs', 'API\JobController');
 Route::resource('companies', 'API\CompanyController');
 
+Route::get('get-info', 'API\UserController@getInfo');
+

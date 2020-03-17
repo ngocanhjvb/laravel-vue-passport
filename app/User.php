@@ -47,4 +47,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function companies()
+    {
+        return $this->morphToMany(Company::class, 'companyable');
+    }
 }

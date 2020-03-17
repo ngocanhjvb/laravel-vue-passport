@@ -10,9 +10,13 @@ class Job extends Model
         'name', 'area', 'code',
     ];
 
-
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function companies()
+    {
+        return $this->morphToMany(Company::class, 'companyable');
     }
 }

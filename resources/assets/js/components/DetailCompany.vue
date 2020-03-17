@@ -1,10 +1,12 @@
 <template>
     <div>
-        <p>{{ $route.params.id }}</p>
+
     </div>
 </template>
 
 <script>
+    import {vueLarApi} from "../helpers";
+
     export default {
         data() {
             return {
@@ -16,6 +18,8 @@
 
             }
         },
+        created() {
+        }
     }
 </script>
 

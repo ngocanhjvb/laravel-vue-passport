@@ -11,8 +11,21 @@ class Company extends Model
     ];
 
 
+    public function jobs()
+    {
+        return $this->morphedByMany(Job::class, 'companyable');
+    }
+
+    /**
+     * Get all of the videos that are assigned this tag.
+     */
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->morphedByMany(User::class, 'companyable');
+    }
+
+    public function employees()
+    {
+        return $this->hasMany(User::class, 'company_id', 'id');
     }
 }
