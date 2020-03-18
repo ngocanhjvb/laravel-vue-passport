@@ -1,4 +1,5 @@
 import app from './app.js'; // import the instance
+import axios from 'axios';
 
 axios.interceptors.request.use(config => {
     app.$Progress.start(); // for every request start the progress

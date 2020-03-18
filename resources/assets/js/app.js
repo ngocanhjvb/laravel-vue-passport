@@ -5,6 +5,9 @@
  */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Vuex from 'vuex'
+import StoreData from './store';
+import {routes} from './router';
 import VueProgressBar from 'vue-progressbar';
 import swal from 'sweetalert2'
 import Gate from './Gate'
@@ -12,6 +15,7 @@ import Gate from './Gate'
 Vue.prototype.$gate = new Gate(window.user);
 
 Vue.use(VueRouter);
+Vue.use(Vuex);
 
 
 require('./bootstrap');
@@ -37,48 +41,12 @@ const options = {
 };
 Vue.use(VueProgressBar, options);
 
-const routes = [
-    {
-        path: '/company/:id',
-        component: require('./components/DetailCompany').default,
-    },
-    {
-        path: '/dashboard',
-        component: require('./components/DashBoard').default,
-    },
-    {
-        path: '/profile',
-        component: require('./components/Profile').default
-    },
-    {
-        path: '/users',
-        component: require('./components/User').default,
-        name: 'users',
-    },
-    {
-        path: '/jobs',
-        component: require('./components/Job').default,
-        name: 'jobs',
-    },
-    {
-        path: '/companies',
-        component: require('./components/Company').default,
-        name: 'companies',
-    },
-    {
-        path: '/developer',
-        component: require('./components/Developer').default
-    },
-    {
-        path: '*',
-        component: require('./components/NotFound').default
-    }
-];
+const store = new Vuex.Store(StoreData);
 
 
 const router = new VueRouter({
-    mode: 'history',
-    routes
+    routes,
+    mode: 'history'
 });
 
 /**
@@ -138,15 +106,11 @@ Vue.component(
 export default new Vue({
     el: '#app',
     router,
+    store,
     data: {
         search: ''
     },
     methods: {
-        // greet: _.debounce(() => {
-        //     console.log(this.$root);
-        //     Fire.$emit('searching');
-        // }, 1000),
-
         greet: function (event) {
             if (this.$root.$route.name !== 'users') {
                 this.$root.$router.push({name: 'users'});
