@@ -175,4 +175,13 @@ class UserController extends Controller
         });
         return response()->json($companies);
     }
+
+    public function getFreeUser($id)
+    {
+        $freeUser = User::with(['company', 'job'])->doesntHave('company')->get();
+        $filter = $freeUser->filter(function ($value, $key) use ($id) {
+            return !$value->companies->contains($id);
+        });
+        return response()->json($filter);
+    }
 }

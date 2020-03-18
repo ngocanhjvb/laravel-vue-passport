@@ -26,4 +26,6 @@ Route::resource('jobs', 'API\JobController');
 Route::resource('companies', 'API\CompanyController');
 
 Route::get('get-info', 'API\UserController@getInfo');
+Route::get('get-free-user/{company}', 'API\UserController@getFreeUser');
+Route::post('invite/{company}', 'API\CompanyController@invite');
 

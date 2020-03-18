@@ -15,11 +15,10 @@
                 <td>{{company.name}}</td>
                 <td>
                     <a href="#" @click="acceptCompany(company)">
-                        <i class="fa fa-address-book blue"></i>
+                        <i class="fa fa-address-book blue">Accept</i>
                     </a>
-                    <br>
                     <a href="#" @click="refuseCompany(company)">
-                        <i class="fa fa-remove blue"></i>
+                        <i class="fa fa-icons blue">Refuse</i>
                     </a>
                 </td>
             </tr>

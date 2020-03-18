@@ -14,6 +14,7 @@ export function vueLarApi(url, method = 'GET', data = {}, responseType = 'JSON')
     return new Promise(((resolve, reject) => {
         axios({
             method: method,
+            baseURL: baseUrl,
             url: url,
             data: data,
             responseType: responseType
