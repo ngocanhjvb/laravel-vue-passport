@@ -14,10 +14,10 @@
                 <td>{{ parseInt(index) + 1}}</td>
                 <td>{{company.name}}</td>
                 <td>
-                    <a href="#" @click="acceptCompany(company)">
+                    <a href="#" @click="acceptCompany(company.id)">
                         <i class="fa fa-address-book blue">Accept</i>
                     </a>
-                    <a href="#" @click="refuseCompany(company)">
+                    <a href="#" @click="refuseCompany(company.id)">
                         <i class="fa fa-icons blue">Refuse</i>
                     </a>
                 </td>
@@ -38,10 +38,28 @@
         },
         methods: {
             acceptCompany(company) {
-                console.log(company)
+                vueLarApi(`api/accept/${company}`, 'POST')
+                    .then((res) => {
+                        swal.fire(
+                            'Updated!',
+                            res.message,
+                            'success'
+                        )
+                    })
+                    .catch((error) => {
+                    });
             },
             refuseCompany(company) {
-                console.log(company)
+                vueLarApi(`api/refuse/${company}`, 'POST')
+                    .then((res) => {
+                        swal.fire(
+                            'Updated!',
+                            res.message,
+                            'success'
+                        )
+                    })
+                    .catch((error) => {
+                    });
             }
         },
         created() {

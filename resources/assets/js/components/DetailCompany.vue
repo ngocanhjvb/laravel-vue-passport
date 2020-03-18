@@ -38,7 +38,7 @@
         },
         methods: {
             invite(userId, index) {
-                vueLarApi(`api/invite/${this.$route.params.id}`, 'POST', {user_id: userId})
+                vueLarApi(`api/invite/${this.$route.params.id}`, 'PUT', {user_id: userId})
                     .then((res) => {
                         this.freeUser.splice(index, 1);
                         swal.fire(

@@ -27,5 +27,9 @@ Route::resource('companies', 'API\CompanyController');
 
 Route::get('get-info', 'API\UserController@getInfo');
 Route::get('get-free-user/{company}', 'API\UserController@getFreeUser');
-Route::post('invite/{company}', 'API\CompanyController@invite');
+Route::put('invite/{company}', 'API\CompanyController@invite');
+
+Route::post('accept/{company}', 'API\UserController@accept');
+Route::post('refuse/{company}', 'API\UserController@refuse');
+Route::put('layOff', 'API\UserController@layOff');
 

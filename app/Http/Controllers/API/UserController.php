@@ -184,4 +184,28 @@ class UserController extends Controller
         });
         return response()->json($filter);
     }
+
+    public function accept($id)
+    {
+        $user = auth()->user();
+        $user->company()->associate($id);
+        $user->save();
+        $user->companies()->updateExistingPivot($id, ['status' => 2]);
+        return response()->json(['message' => "Accept !!!"]);
+    }
+
+    public function refuse($id)
+    {
+        $user = auth()->user();
+        $user->companies()->updateExistingPivot($id, ['status' => 0]);
+        return response()->json(['message' => "Refuse !!!"]);
+    }
+
+    public function layOff()
+    {
+        $user = auth()->user();
+        $user->company()->dissociate();
+        $user->save();
+        return response()->json(['message' => "Layoff !!!"]);
+    }
 }
