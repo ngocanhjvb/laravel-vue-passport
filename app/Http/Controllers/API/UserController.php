@@ -171,7 +171,7 @@ class UserController extends Controller
     public function getInfo()
     {
         $companies = auth()->user()->companies->filter(function ($value, $key) {
-            return $value->status = WAITING;
+            return $value->status === WAITING;
         });
         return response()->json($companies);
     }
