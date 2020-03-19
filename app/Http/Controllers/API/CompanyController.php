@@ -111,15 +111,24 @@ class CompanyController extends Controller
         //
     }
 
-    public function invite(Request $request, $id)
+    public function accept(Request $request, $id)
+    {
+        $user = User::findOrFail($request->user_id);
+        $user->company()->associate($id);
+        $user->save();
+        $user->companies()->updateExistingPivot($id, ['status' => 2]);
+        return response()->json(['message' => "Accept !!!"]);
+    }
+
+    public function getUserAssign($id)
     {
         $company = Company::findOrFail($id);
-        $company->users()->attach([
-            $request->user_id => ['status' => 1]
-        ]);
-
-        $user = User::findOrFail($request->user_id);
-
-        return response()->json(['message' => "Invited $user->name !!!"]);
+        $filter = [];
+        foreach ($company->users->load('job') as $user) {
+            if ($user->pivot->status == WAITING) {
+                $filter[] = $user;
+            }
+        }
+        return response()->json($filter);
     }
 }

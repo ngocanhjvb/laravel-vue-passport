@@ -1,3 +1,5 @@
+import {vueLarApi} from "./helpers";
+
 export default {
     state: {
         currentCompany: null,
@@ -12,22 +14,34 @@ export default {
         }
     },
     mutations: {
-        hasInvitation(state, companies) {
-            state.currentCompany = null;
-            state.invitations = companies;
+        checkInvitation(state, company) {
+            state.invitations = company;
         },
-        acceptCompany(state, company) {
-            state.invitations = null;
+        checkCurrentCompany(state, company) {
             state.currentCompany = company;
         },
-        refuseCompany(state, companies) {
+        enterCompany(state, company) {
+            state.invitations = company;
             state.currentCompany = null;
-            state.invitations = companies;
         },
-        layoff(state) {
+        layOff(state) {
             state.invitations = null;
             state.currentCompany = null;
         },
+        retract(state) {
+            state.invitations = null;
+            state.currentCompany = null;
+        }
     },
-    actions: {}
+    actions: {
+        checkInvitation(context) {
+            vueLarApi('api/check-invitation')
+                .then((res) => {
+                    context.commit('checkInvitation', res);
+                })
+                .catch((error) => {
+
+                });
+        }
+    }
 };

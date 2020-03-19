@@ -92,7 +92,7 @@
                                 <td v-show="$gate.isAdminOrAuthor()">
                                     <router-link :to="`/company/` + company.id" class="nav-link">
                                         <p>
-                                           List Employees of {{company.name}}
+                                           List Employees assign {{company.name}}
                                         </p>
                                     </router-link>
                                 </td>

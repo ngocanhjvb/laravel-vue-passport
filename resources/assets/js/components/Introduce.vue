@@ -7,24 +7,8 @@
                     <img class="profile-user-img img-fluid img-circle"
                          :src="getProfilePhoto()" alt="User profile picture">
                 </div>
-
                 <h3 class="profile-username text-center">{{ userProfile.name }}</h3>
-
                 <p class="text-muted text-center">Software Engineer</p>
-
-                <ul class="list-group list-group-unbordered mb-3">
-                    <li class="list-group-item">
-                        <b>Followers</b> <a class="float-right">1,322</a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Following</b> <a class="float-right">543</a>
-                    </li>
-                    <li class="list-group-item">
-                        <b>Friends</b> <a class="float-right">13,287</a>
-                    </li>
-                </ul>
-
-                <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
             </div>
             <!-- /.card-body -->
         </div>
@@ -33,8 +17,22 @@
         <!-- About Me Box -->
         <div class="card card-primary">
             <div class="card-header">
-                <button class="btn btn-danger" @click="layOff">LayOff <i
-                    class="fas fa-user-plus fa-fw"></i></button>
+                <div v-if="currentCompany">
+                    <p>Your Company is {{ currentCompany }}</p>
+                    <button class="btn btn-danger" @click="layOff">LayOff <i
+                        class="fas fa-user-plus fa-fw"></i></button>
+                </div>
+                <div v-else>
+                    You not in a company
+                </div>
+                <div v-if="invitations">
+                    <h4>Invitation</h4>
+                    <p>{{ invitations }}</p>
+                </div>
+                <div v-if="currentCompany">
+                    <h4>CurrentCompany</h4>
+                    <p>{{ currentCompany }}</p>
+                </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -53,13 +51,19 @@
         props: ['userProfile'],
         data() {
             return {
-                photo: false
+                photo: false,
             }
         },
         computed: {
             profile() {
                 return this.userProfile
             },
+            invitations() {
+                return this.$store.state.invitations
+            },
+            currentCompany() {
+                return this.$store.state.currentCompany
+            }
         },
         methods: {
             getProfilePhoto() {
@@ -77,10 +81,14 @@
                             res.message,
                             'success'
                         )
+                        this.$store.commit('layOff')
                     })
                     .catch((error) => {
                     });
             }
+        },
+        created() {
+            this.$store.dispatch('checkInvitation');
         }
 
     }

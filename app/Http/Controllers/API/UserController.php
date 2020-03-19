@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Company;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
@@ -104,7 +105,13 @@ class UserController extends Controller
 
     public function profile()
     {
-        return auth('api')->user();
+        $user = auth()->user();
+        if ($user->company) {
+            $user->companyName = $user->company->name;
+        } else {
+            $user->companyName = null;
+        }
+        return $user;
     }
 
     /**
@@ -168,37 +175,15 @@ class UserController extends Controller
         return response()->json($users);
     }
 
-    public function getInfo()
+    public function enterCompany(Request $request, $id)
     {
-        $companies = auth()->user()->companies->filter(function ($value, $key) {
-            return $value->status === WAITING;
-        });
-        return response()->json($companies);
-    }
+        $company = Company::findOrFail($id);
+        $company->users()->attach([
+            auth()->id() => ['status' => WAITING]
+        ]);
 
-    public function getFreeUser($id)
-    {
-        $freeUser = User::with(['company', 'job'])->doesntHave('company')->get();
-        $filter = $freeUser->filter(function ($value, $key) use ($id) {
-            return !$value->companies->contains($id);
-        });
-        return response()->json($filter);
-    }
+        return response()->json(['message' => "Enter $company->name !!!"]);
 
-    public function accept($id)
-    {
-        $user = auth()->user();
-        $user->company()->associate($id);
-        $user->save();
-        $user->companies()->updateExistingPivot($id, ['status' => 2]);
-        return response()->json(['message' => "Accept !!!"]);
-    }
-
-    public function refuse($id)
-    {
-        $user = auth()->user();
-        $user->companies()->updateExistingPivot($id, ['status' => 0]);
-        return response()->json(['message' => "Refuse !!!"]);
     }
 
     public function layOff()
@@ -207,5 +192,50 @@ class UserController extends Controller
         $user->company()->dissociate();
         $user->save();
         return response()->json(['message' => "Layoff !!!"]);
+    }
+
+    public function retract(Request $request)
+    {
+        $companies = auth()->user()->companies;
+        $filter = $companies->filter(function ($value, $key) {
+            return $value->pivot->status == WAITING;
+        });
+        $companyId = $filter->first()->id;
+        $companyName = $filter->first()->name;
+        auth()->user()->companies()->updateExistingPivot($companyId, ['status' => 2]);
+        return response()->json(['message' => "Retract $companyName !!!"]);
+    }
+
+
+    public function checkInvitation()
+    {
+        $user = auth()->user();
+        $filter = [];
+        foreach ($user->companies as $company) {
+            if ($company->pivot->status == 1) {
+                $filter[] = $company;
+            }
+        }
+        if (empty($filter)) {
+            return null;
+        }
+        return response()->json($filter[0]->name);
+    }
+
+    public function getListCompanies()
+    {
+        $user = auth()->user();
+        $companies = Company::all();
+        foreach ($companies as $key => $company) {
+            if ($company->users->contains($user)) {
+                foreach ($company->users as $user) {
+                    if ($user->id == auth()->id() && $user->pivot->status == WAITING) {
+                        unset($companies[$key]);
+                    }
+                }
+            }
+        }
+
+        return response()->json($companies);
     }
 }

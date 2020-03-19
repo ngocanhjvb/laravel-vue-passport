@@ -36,7 +36,10 @@
         created() {
             vueLarApi('/api/profile', 'GET')
                 .then((res) => {
-                    this.user = res
+                    this.user = res;
+                    if (res.companyName) {
+                        this.$store.commit('checkCurrentCompany', res.companyName)
+                    }
                 })
                 .catch((err) => {
                     console.log(err);

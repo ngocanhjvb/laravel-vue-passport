@@ -13,7 +13,7 @@ class Company extends Model
 
     public function jobs()
     {
-        return $this->morphedByMany(Job::class, 'companyable');
+        return $this->morphedByMany(Job::class, 'companyable')->withPivot('status');
     }
 
     /**
@@ -21,7 +21,7 @@ class Company extends Model
      */
     public function users()
     {
-        return $this->morphedByMany(User::class, 'companyable');
+        return $this->morphedByMany(User::class, 'companyable')->withPivot('status');
     }
 
     public function employees()

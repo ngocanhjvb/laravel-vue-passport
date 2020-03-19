@@ -50,6 +50,6 @@ class User extends Authenticatable
 
     public function companies()
     {
-        return $this->morphToMany(Company::class, 'companyable');
+        return $this->morphToMany(Company::class, 'companyable')->withPivot('status');
     }
 }

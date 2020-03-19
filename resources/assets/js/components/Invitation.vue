@@ -1,29 +1,40 @@
 <template>
     <div>
-        <h4>List Companies invitations</h4>
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="(company,index) in companies" :key="company.id">
-                <td>{{ parseInt(index) + 1}}</td>
-                <td>{{company.name}}</td>
-                <td>
-                    <a href="#" @click="acceptCompany(company.id)">
-                        <i class="fa fa-address-book blue">Accept</i>
-                    </a>
-                    <a href="#" @click="refuseCompany(company.id)">
-                        <i class="fa fa-icons blue">Refuse</i>
-                    </a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div v-if="(!invitation && !currentCompany)">
+            <h4>List Companies To Join</h4>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(company,index) in listCompanies" :key="company.id">
+                    <td>{{ parseInt(index) + 1}}</td>
+                    <td>{{company.name}}</td>
+                    <td>
+                        <a href="#" @click="enterCompany(company.id,index)">
+                            <i class="fa fa-address-book blue">Enter</i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div v-else>
+            <div v-if="invitation">
+                <p style="color: red">Your company'invitation</p>
+                <p>{{ invitation }}</p>
+                <button class="btn btn-danger" @click="retract">Retract<i
+                    class="fas fa-remove fa-fw"></i></button>
+            </div>
+            <div v-if="currentCompany">
+                <p style="color: blue">Your company you in</p>
+                <p>{{ currentCompany }}</p>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -33,43 +44,54 @@
     export default {
         data() {
             return {
-                companies: []
+                listCompanies: [],
             }
         },
         methods: {
-            acceptCompany(company) {
-                vueLarApi(`api/accept/${company}`, 'POST')
+            enterCompany(company, index) {
+                vueLarApi(`api/enterCompany/${company}`, 'POST')
                     .then((res) => {
                         swal.fire(
-                            'Updated!',
+                            'Enter!',
                             res.message,
                             'success'
-                        )
+                        );
+                        this.$store.commit('enterCompany', this.listCompanies[index].name);
+                        this.listCompanies.splice(index, 1);
                     })
                     .catch((error) => {
                     });
             },
-            refuseCompany(company) {
-                vueLarApi(`api/refuse/${company}`, 'POST')
+            retract() {
+                vueLarApi(`api/retract`, 'PUT')
                     .then((res) => {
                         swal.fire(
-                            'Updated!',
+                            'Retract!',
                             res.message,
                             'success'
-                        )
+                        );
+                        this.$store.commit('retract')
                     })
                     .catch((error) => {
                     });
-            }
+            },
         },
         created() {
-            vueLarApi('api/get-info')
+            vueLarApi(`api/get-list-companies`)
                 .then((res) => {
-                    this.companies = res
+                    this.listCompanies = res;
                 })
                 .catch((error) => {
-                   console.log(error)
                 });
+        },
+        computed: {
+            invitation() {
+                return this.$store.state.invitations;
+            },
+            currentCompany() {
+                return this.$store.state.currentCompany;
+            }
+
         }
     }
 </script>

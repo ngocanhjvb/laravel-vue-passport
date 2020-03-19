@@ -25,11 +25,13 @@ Route::put('profile', 'API\UserController@updateProfile');
 Route::resource('jobs', 'API\JobController');
 Route::resource('companies', 'API\CompanyController');
 
-Route::get('get-info', 'API\UserController@getInfo');
-Route::get('get-free-user/{company}', 'API\UserController@getFreeUser');
-Route::put('invite/{company}', 'API\CompanyController@invite');
 
-Route::post('accept/{company}', 'API\UserController@accept');
-Route::post('refuse/{company}', 'API\UserController@refuse');
+Route::get('get-user-assign/{company}', 'API\CompanyController@getUserAssign');
+Route::get('check-invitation', 'API\UserController@checkInvitation');
+Route::get('get-list-companies', 'API\UserController@getListCompanies');
+Route::put('accept/{company}', 'API\CompanyController@accept');
+Route::post('enterCompany/{company}', 'API\UserController@enterCompany');
 Route::put('layOff', 'API\UserController@layOff');
+Route::put('retract', 'API\UserController@retract');
+
 

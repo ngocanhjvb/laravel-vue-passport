@@ -19,3 +19,6 @@ Auth::routes();
 
 Route::get('{path}','HomeController@index')->where('path', '.*');
 
+
+//Route::get('test','TestController@test');
+
