@@ -57,7 +57,6 @@
                             'success'
                         );
                         this.$store.commit('enterCompany', this.listCompanies[index].name);
-                        this.listCompanies.splice(index, 1);
                     })
                     .catch((error) => {
                     });

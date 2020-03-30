@@ -116,7 +116,7 @@ class CompanyController extends Controller
         $user = User::findOrFail($request->user_id);
         $user->company()->associate($id);
         $user->save();
-        $user->companies()->updateExistingPivot($id, ['status' => 2]);
+        $user->companies()->updateExistingPivot($id, ['status' => ACCEPT]);
         return response()->json(['message' => "Accept !!!"]);
     }
 

@@ -202,7 +202,7 @@ class UserController extends Controller
         });
         $companyId = $filter->first()->id;
         $companyName = $filter->first()->name;
-        auth()->user()->companies()->updateExistingPivot($companyId, ['status' => 2]);
+        auth()->user()->companies()->updateExistingPivot($companyId, ['status' => REFUSE]);
         return response()->json(['message' => "Retract $companyName !!!"]);
     }
 
@@ -212,7 +212,7 @@ class UserController extends Controller
         $user = auth()->user();
         $filter = [];
         foreach ($user->companies as $company) {
-            if ($company->pivot->status == 1) {
+            if ($company->pivot->status == WAITING) {
                 $filter[] = $company;
             }
         }
