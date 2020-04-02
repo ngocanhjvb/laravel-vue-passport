@@ -35,11 +35,32 @@
                 <p>{{ currentCompany }}</p>
             </div>
         </div>
+        <div>
+            <router-link to="/profile/small" class="nav-link">
+                <i class="nav-icon fas fa-th purple"></i>
+                <p>
+                    Small
+                </p>
+            </router-link>
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 
 <script>
     import {vueLarApi} from "../helpers";
+    import VueRouter from 'vue-router';
+    import InvitationSmall from "./InvitationSmall";
+
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/small',
+                component: InvitationSmall,
+                name: 'small',
+            }
+        ]
+    })
 
     export default {
         data() {

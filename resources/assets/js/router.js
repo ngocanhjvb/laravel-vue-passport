@@ -1,3 +1,5 @@
+import InvitationSmall from "./components/InvitationSmall";
+
 export const routes = [
     {
         path: '/company/:id',
@@ -9,7 +11,10 @@ export const routes = [
     },
     {
         path: '/profile',
-        component: require('./components/Profile').default
+        component: require('./components/Profile').default,
+        children: [
+            { path: 'small', component: InvitationSmall },
+        ]
     },
     {
         path: '/users',
