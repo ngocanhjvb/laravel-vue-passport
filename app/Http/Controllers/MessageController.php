@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Message;
 use Illuminate\Http\Request;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Auth;
 use App\Events\MessagePosted;
 

@@ -1,9 +1,9 @@
 <template>
     <div class="chat-layout">
         <div class="chat-layout-container">
-            <div class="user-count">
-                <h3>User count: </h3>
-            </div>
+<!--            <div class="user-count">-->
+<!--                <h3>User count: </h3>-->
+<!--            </div>-->
             <div class="title">
                 <h1>Chat Room</h1>
             </div>
@@ -35,14 +35,23 @@
         },
 
         created() {
-            this.loadMessage()
+            this.loadMessage();
             Echo.channel('chatroom')
                 .listen('MessagePosted', (data) => {
-                    if (data.to_user.id == this.$root.currentUserLogin.id) {
-                        let message = data.message
-                        message.user = data.user
-                        this.list_messages.push(message)
-                    }
+                    // console.log(data)
+                    // if (data.message.user_id == this.$root.currentUserLogin.id) {
+                    //     let message = data.message
+                    //     message.user = data.user
+                    //     this.list_messages.push(message)
+                    // }
+
+                    this.list_messages.push({
+                        message: data.message.message,
+                        created_at: data.message.created_at,
+                        user: data.user
+                    })
+
+
                 })
         },
 
