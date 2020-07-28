@@ -36,6 +36,10 @@ export const routes = [
         component: require('./components/Developer').default
     },
     {
+        path: '/chat',
+        component: require('./components/chat_components/ChatLayout').default
+    },
+    {
         path: '*',
         component: require('./components/NotFound').default
     }

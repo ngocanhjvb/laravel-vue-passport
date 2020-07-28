@@ -42,6 +42,15 @@ export default {
                 .catch((error) => {
 
                 });
+        },
+        getMessages() {
+            var start_time = new Date().getTime();
+            const a = axios.get('api/messages')
+                .then(res => {
+                    var request_time = new Date().getTime() - start_time;
+                    return res
+                })
+            return a
         }
     }
 };

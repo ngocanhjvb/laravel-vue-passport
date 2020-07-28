@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->morphToMany(Company::class, 'companyable')->withPivot('status');
     }
+
+    public function message()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

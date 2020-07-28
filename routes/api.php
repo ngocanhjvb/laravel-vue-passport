@@ -35,3 +35,10 @@ Route::put('layOff', 'API\UserController@layOff');
 Route::put('retract', 'API\UserController@retract');
 
 
+//lấy tất cả các messages, và sẽ có form để chat
+Route::get('messages', 'MessageController@index');
+
+//insert chat content vào trong database
+Route::post('messages', 'MessageController@store');
+
+

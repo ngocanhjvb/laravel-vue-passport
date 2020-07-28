@@ -11,6 +11,7 @@ import {routes} from './router';
 import VueProgressBar from 'vue-progressbar';
 import swal from 'sweetalert2'
 import Gate from './Gate'
+import {vueLarApi} from "./helpers";
 
 Vue.prototype.$gate = new Gate(window.user);
 
@@ -95,6 +96,10 @@ Vue.component(
     'invitation',
     require('./components/Invitation.vue').default
 );
+Vue.component(
+    'chat-layout',
+    require('./components/chat_components/ChatLayout.vue').default
+);
 
 
 /**
@@ -108,7 +113,11 @@ export default new Vue({
     router,
     store,
     data: {
-        search: ''
+        search: '',
+        currentUserLogin: {}
+    },
+    created() {
+        this.getCurrentUserLogin()
     },
     methods: {
         greet: function (event) {
@@ -118,6 +127,14 @@ export default new Vue({
             setTimeout(function () {
                 Fire.$emit('searching');
             }, 1000);
+        },
+        getCurrentUserLogin() {
+            vueLarApi('/api/profile', 'GET')
+                .then((res) => {
+                    this.currentUserLogin = res;
+                })
+                .catch((err) => {
+                })
         }
     }
 });
